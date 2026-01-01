@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JSMB/Musics</title>
+<style>
+    body {
+        font-family: 'Arial', sans-serif;
+        background: linear-gradient(135deg, #b32d2d, #800000);
+        color: #fff;
+        text-align: center;
+        padding: 20px;
+        margin: 0;
+    }
+
+    h1 {
+        color: #1DB954;
+        margin-bottom: 40px;
+        font-size: 2em;
+        text-shadow: 2px 2px 6px #000;
+    }
+
+    #audios {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 25px;
+        justify-items: center;
+        align-items: start;
+    }
+
+    .audio-card {
+        background: linear-gradient(145deg, #2c2c2c, #1a1a1a);
+        padding: 15px;
+        border-radius: 20px;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.7);
+        width: 100%;
+        max-width: 250px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        border: 2px solid #444;
+        height: 410px; /* même taille pour toutes */
+    }
+
+    .audio-card img {
+        width: 100%;
+        height: 250px; /* carré */
+        object-fit: cover;
+        border-radius: 15px;
+        margin-bottom: 10px;
+    }
+
+    .audio-card p {
+        margin: 5px 0;
+        font-weight: bold;
+        font-size: 1em;
+        text-align: center;
+        text-shadow: 1px 1px 3px #000;
+        height: 40px; /* espace fixe pour le titre */
+        overflow: hidden;
+    }
+
+    .play-button {
+        border: none;
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        font-size: 24px;
+        color: #fff;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 5px;
+    }
+
+    .time-remaining {
+        margin-top: 5px;
+        font-size: 0.9em;
+        color: #ccc;
+        height: 20px; /* espace fixe pour temps restant */
+    }
+
+    @media(max-width: 1000px) {
+        #audios {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media(max-width: 600px) {
+        #audios {
+            grid-template-columns: 1fr;
+        }
+        .audio-card {
+            height: 380px;
+        }
+        .audio-card img {
+            height: 200px; 
+        }
+    }
+</style>
+</head>
+<body>
+
+<h1>JSMB/Musics</h1>
+
+<div id="audios"></div>
+
+<script>
+const audioItems = [
+  /* ===== LA PRIMA ===== */
+  { audio: "../audio/Biha Mkeffi (Acoustique).mp3", img: "../Images/biha.png", title: "Biha Mkeffi - The Trueborns" },
+  { audio: "../audio/Hibet el Hemra.mp3", img: "../Images/hibet.avif", title: "Hibet el Hemra - The Trueborns" },
+  { audio: "../audio/Cauchemar Eternel.mp3", img: "../Images/eternel.png", title: "Cauchemar Eternel - The Trueborns" },
+  { audio: "../audio/Trueborns - Ismim.mp3", img: "../Images/ismim.webp", title: "Ismim - The Trueborns" },
+  { audio: "../audio/Fi ghsani le3ab.mp3", img: "../Images/le3ab.avif", title: "Fi Ghsani Le3ab - The Trueborns" },
+  { audio: "../audio/Prima W 3lami (Acoustique).mp3", img: "../Images/3elami.avif", title: "Prima W 3lami - The Trueborns" },
+  { audio: "../audio/Latitude 36°.mp3", img: "../Images/36.avif", title: "Latitude 36 - The Trueborns" },
+
+  /* ===== GOURAYA UNITED (UGU) ===== */
+  { audio: "../audio/Gouraya United - Amore Mia 2024.mp3", img: "../Images/amor mia.png", title: "Amore Mia - UGU" },
+  { audio: "../audio/uguallo.mp3", img: "../Images/ALLO.png", title: "Allo Allo - UGU" },
+  { audio: "../audio/vert.mp3", img: "../Images/31 déc. 2025, 22_42_14.png", title: "Khadra w Hamra Maderti Fina" },
+  { audio: "../audio/Gouraya United - Lhamra ntiya ma drogue.mp3", img: "../Images/ugu.png", title: "Lhamra ntiya ma drogue" },
+  { audio: "../audio/Nouveau chant Gouraya United - Jamais nbedlek b knouz edenya.mp3", img: "../Images/31 déc. 2025, 22_42_14.png", title: "Jamais nbedlek b knouz denya" },
+  { audio: "../audio/Rosso.mp3", img: "../Images/rosso verde.png", title: "Rosso Verde - UGU" },
+  { audio: "../audio/cup.mp3", img: "../Images/vamos.png", title: "Vamos Vamos Ya Les Rouges" },
+
+  /* ===== ULTRAS MARINS ===== */
+  { audio: "../audio/Ultras Marins - JSMB Nefdik Brohi 2021.mp3", img: "../Images/429779083_920262243127118_6489129517870752507_n.jpg", title: "JSMB Nefdik Brohi - UM11" },
+  { audio: "../audio/Ultras Marins 11 - Richet zmaan.mp3", img: "../Images/429779083_920262243127118_6489129517870752507_n.jpg", title: "Richet zmaan - UM11" },
+  { audio: "../audio/cour.mp3", img: "../Images/429779083_920262243127118_6489129517870752507_n.jpg", title: "Cours d'histoire - UM11" },
+  { audio: "../audio/lil.mp3", img: "../Images/429779083_920262243127118_6489129517870752507_n.jpg", title: "Ya Lil Ya Lil - UM11" },
+
+  /* ===== CURVA FURIA ===== */
+  { audio: "../audio/p.mp3", img: "../Images/Capture d’écran 2026-01-01 002255.jpg", title: "Contre le système - Curva Furia" },
+  { audio: "../audio/cup1.mp3", img: "../Images/Capture d’écran 2026-01-01 002255.jpg", title: "Vogliamo La Copa - Curva Furia" },
+  { audio: "../audio/nif.mp3", img: "../Images/Capture d’écran 2026-01-01 002255.jpg", title: "Tighri N Nif - Curva Furia" },
+  { audio: "../audio/color.mp3", img: "../Images/Capture d’écran 2026-01-01 002255.jpg", title: "Pour Nos Couleurs - Curva Furia" },
+  { audio: "../audio/solo.mp3", img: "../Images/Capture d’écran 2026-01-01 002255.jpg", title: "Solo Contro Tutti - Curva Furia" },
+
+  /* ===== JSMB / ARTISTES & DIVERS ===== */
+  { audio: "../audio/italia.mp3", img: "../Images/images (1).jpg", title: "Italia Italia Ya Milano" },
+  { audio: "../audio/jsmb.mp3", img: "../Images/images.jpg", title: "7ena Welad L7emra" },
+  { audio: "../audio/JSMB1.mp3", img: "../Images/images (2).jpg", title: "Nedouha Zkara" }
+];
+
+const container = document.getElementById("audios");
+let currentAudio = null; 
+
+audioItems.forEach((item, index) => {
+    const card = document.createElement("div");
+    card.classList.add("audio-card");
+
+    const image = document.createElement("img");
+    image.src = item.img;
+    card.appendChild(image);
+
+    const title = document.createElement("p");
+    title.textContent = item.title;
+    title.style.color = index % 2 === 0 ? "red" : "green";
+    card.appendChild(title);
+
+    const audio = new Audio(item.audio);
+    audio.preload = "none";
+
+    const playBtn = document.createElement("button");
+    playBtn.classList.add("play-button");
+    playBtn.style.background = index % 2 === 0 ? "red" : "green";
+    playBtn.innerHTML = "▶";
+
+    const timeDisplay = document.createElement("div");
+    timeDisplay.classList.add("time-remaining");
+    timeDisplay.textContent = "00:00";
+
+    playBtn.addEventListener("click", () => {
+        if(currentAudio && currentAudio !== audio) {
+            currentAudio.pause();
+            currentAudio.currentTime = 0;
+            document.querySelectorAll(".play-button").forEach((btn,i) => {
+                btn.innerHTML = "▶";
+                btn.style.background = i % 2 === 0 ? "red" : "green";
+            });
+        }
+
+        if(audio.paused){
+            audio.play();
+            playBtn.innerHTML = "⏸";
+            currentAudio = audio;
+        } else {
+            audio.pause();
+            playBtn.innerHTML = "▶";
+        }
+    });
+
+    audio.addEventListener("timeupdate", () => {
+        const remaining = Math.floor(audio.duration - audio.currentTime);
+        const minutes = Math.floor(remaining / 60).toString().padStart(2, "0");
+        const seconds = (remaining % 60).toString().padStart(2, "0");
+        timeDisplay.textContent = `${minutes}:${seconds}`;
+    });
+
+    audio.addEventListener("ended", () => {
+        playBtn.innerHTML = "▶";
+        timeDisplay.textContent = "00:00";
+        playBtn.style.background = index % 2 === 0 ? "red" : "green";
+    });
+
+    card.appendChild(playBtn);
+    card.appendChild(timeDisplay);
+    container.appendChild(card);
+});
+</script>
+
+</body>
+</html>
